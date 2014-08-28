@@ -1,2 +1,1 @@
-hue hue hue
-hue
+Personal IRC bot, fork of BigBen.
