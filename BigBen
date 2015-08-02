@@ -1,0 +1,381 @@
+#! /usr/bin/env python
+import irclib
+import ircbot
+import time
+import sys
+import thread
+import os
+import random
+import urllib
+import commands
+import re
+import logging
+import modules
+from modules.pubmsg import *
+from modules.privmsg import *
+from modules.join import *
+from modules.static import *
+from re import sub, search
+pubTimeCommand = ".time"
+privTimeCommand = ".time"
+sayCommand = ".speak"
+PMTimeCommand = ".ptime"
+log = "no"
+logfile = "users.txt"
+amounts = []
+
+class Bot(ircbot.SingleServerIRCBot):
+    def __init__ (self, channels, nick, server, port, password, name):
+        ircbot.SingleServerIRCBot.__init__(self, [(server,port)], nick, name, 10)
+        self.nick = nick
+        self.mychannels = channels
+        self.password = password
+        self.pubmodules = []
+        self.currentHour = self.getHour()
+        self.currentMin = self.getMin() #sets current hour and minute, minute doesn't do anything right now
+        self.amounts = amounts
+#        thread.start_new_thread(self.wait, ()) #listens for the time change in a separate thread so we can listen for input as well
+        if log == "yes":
+            thread.start_new_thread(self.setupLog, ()) #starts a new thread that sets up the users per channel
+        self.array = []
+        self.commandnicks = []
+        self.responses = []
+        self.ignores = []
+        self.message = '' #message for the .time command
+        self.custom = 0
+
+    def getHour(self):
+        theTime = time.gmtime()#does things for GMT
+        longHour = theTime.tm_hour #using this because I am far more comfortable with C than I am with Python
+        longHour = longHour + 1 #DST
+        shortHour = longHour % 12
+        return shortHour
+
+    def on_kick(self, c, e):
+        kickedNick = e.arguments()[0]
+        if kickedNick == self.nick: #only does the following if the bot was the one that is kicked
+            time.sleep(10)#waits 10 seconds
+            for channel in self.mychannels:
+                self.connection.join(channel) #joins all the channels if kicked, joining a channel the bot is already in is okay
+
+    def getMin(self):
+        theTime = time.gmtime()
+        return theTime.tm_min
+
+    def getSec(self):
+        theTime = time.gmtime()
+        return theTime.tm_sec
+
+    def get_version(self):
+        return "Ayy" #CTCP VERSION reply
+
+    def fileUpdate(self):
+        self.nicksFile = open("NICKS", 'r')
+        self.commandnicks = self.nicksFile.readlines()
+        self.nicksFile.close()
+        self.ignoreFile = open("IGNORE", 'r')
+        self.ignores = self.ignoreFile.readlines()
+        self.ignoreFile.close()
+        self.moduleUpdate()
+
+    def enableDisableModule(self, function, moduleType, moduleName, event):
+        self.moduleUpdate()
+        source = event.source().split('!')[0]
+        if moduleType not in ['pubmsg', 'privmsg', 'join']:
+            self.connection.privmsg(source, "Invalid module type.")
+            return
+        elif moduleType == 'pubmsg':
+            if moduleName not in modules.pubmsg.__all__:
+                self.connection.privmsg(source,
+                                        "Module " + moduleName + " not found.")
+                return
+            elif moduleName in modules.pubmsg.__enabled__ and function == 'enable':
+                self.connection.privmsg(source,
+                                        "Module " + moduleName + " already enabled.")
+            elif moduleName not in modules.pubmsg.__enabled__ and function == 'disable':
+                self.connection.privmsg(source,
+                                        "Module " + moduleName + " already disabled.")
+            else:
+                if function == 'enable':
+                    self.pubenabled.append(moduleName)
+                else:
+                    self.pubenabled.remove(moduleName)
+                self.pubenabled.sort(key=str.lower)
+                initfile = open('modules/pubmsg/__init__.py', 'w')
+                initfile.write('__all__ = [')
+                for item in self.puball:
+                    initfile.write('"' + item + '", ')
+                initfile.write(']\n')
+                initfile.write('__enabled__ = [')
+                for item in self.pubenabled:
+                    initfile.write('"' + item + '", ')
+                initfile.write(']\n')
+                initfile.close()
+                               
+                
+        elif moduleType == 'pubmsg':
+            if moduleName not in modules.privmsg.__all__:
+                self.connection.privmsg(source,
+                                        "Module " + moduleName + " not found.")
+                return
+            elif moduleName in modules.privmsg.__enabled__ and function == 'enable':
+                self.connection.privmsg(source,
+                                        "Module " + moduleName + " already enabled.")
+            elif moduleName not in modules.privmsg.__enabled__ and function == 'disable':
+                self.connection.privmsg(source,
+                                        "Module " + moduleName + " already disabled.")
+            else:
+                if function == 'enable':
+                    self.privenabled.append(moduleName)
+                else:
+                    self.privenabled.remove(moduleName)
+                self.privenabled.sort(key=str.lower)
+                initfile = open('modules/privmsg/__init__.py', 'w')
+                initfile.write('__all__ = [')
+                for item in self.privall:
+                    initfile.write('"' + item + '", ')
+                initfile.write(']\n')
+                initfile.write('__enabled__ = [')
+                for item in self.privenabled:
+                    initfile.write('"' + item + '", ')
+                initfile.write(']\n')
+                initfile.close()
+
+        elif moduleType == 'join':
+            if moduleName not in modules.join.__all__:
+                self.connection.privmsg(source,
+                                        "Module " + moduleName + " not found.")
+                return
+            elif moduleName in modules.join.__enabled__ and function == 'enable':
+                self.connection.privmsg(source,
+                                        "Module " + moduleName + " already enabled.")
+            elif moduleName not in modules.join.__enabled__ and function == 'disable':
+                self.connection.privmsg(source,
+                                        "Module " + moduleName + " already disabled.")
+            else:
+                if function == 'enable':
+                    self.joinenabled.append(moduleName)
+                else:
+                    self.joinenabled.remove(moduleName)
+                self.joinenabled.sort(key=str.lower)
+                initfile = open('modules/join/__init__.py', 'w')
+                initfile.write('__all__ = [')
+                for item in self.joinall:
+                    initfile.write('"' + item + '", ')
+                initfile.write(']\n')
+                initfile.write('__enabled__ = [')
+                for item in self.joinenabled:
+                    initfile.write('"' + item + '", ')
+                initfile.write(']\n')
+                initfile.close()
+
+        elif moduleType == 'static':
+            if moduleName not in modules.static.__all__:
+                self.connection.privmsg(source,
+                                        "Module " + moduleName + " not found.")
+                return
+            elif moduleName in modules.static.__enabled__ and function == 'enable':
+                self.connection.privmsg(source,
+                                        "Module " + moduleName + " already enabled.")
+            elif moduleName not in modules.static.__enabled__ and function == 'disable':
+                self.connection.privmsg(source,
+                                        "Module " + moduleName + " already disabled.")
+            else:
+                if function == 'enable':
+                    self.staticenabled.append(moduleName)
+                else:
+                    self.staticenabled.remove(moduleName)
+                self.staticenabled.sort(key=str.lower)
+                initfile = open('modules/static/__init__.py', 'w')
+                initfile.write('__all__ = [')
+                for item in self.staticall:
+                    initfile.write('"' + item + '", ')
+                initfile.write(']\n')
+                initfile.write('__enabled__ = [')
+                for item in self.staticenabled:
+                    initfile.write('"' + item + '", ')
+                initfile.write(']\n')
+                initfile.close()
+        self.moduleUpdate()
+
+        if function == 'enable':
+            self.connection.privmsg(source, "Loaded module " + moduleName + ".")
+        else:
+            self.connection.privmsg(source, "Unloaded module " + moduleName + ".")
+
+
+
+    def moduleUpdate(self):
+        reload(modules)
+        reload(modules.pubmsg)
+        reload(modules.privmsg)
+        reload(modules.join)
+        reload(modules.static)
+        self.puball = modules.pubmsg.__all__
+        self.pubenabled = modules.pubmsg.__enabled__
+        self.privall = modules.privmsg.__all__
+        self.privenabled = modules.privmsg.__enabled__
+        self.joinall = modules.join.__all__
+        self.joinenabled = modules.join.__enabled__
+        self.staticall = modules.join.__all__
+        self.staticenabled = modules.join.__enabled__
+        for item in modules.pubmsg.__all__:
+            exec("reload(modules.pubmsg." + item + ")")
+        for item in modules.privmsg.__all__:
+            exec("reload(modules.privmsg." + item + ")")
+        for item in modules.join.__all__:
+            exec("reload(modules.join." + item + ")")
+        for item in modules.static.__all__:
+            exec("reload(modules.static." + item + ")")
+        self.pubmodules = []
+        for item in modules.pubmsg.__enabled__:
+            exec("self.pubmodules.append("+item+"."+item+"())")
+        self.privmodules = []
+        for item in modules.privmsg.__enabled__:
+            exec("self.privmodules.append("+item+"."+item+"())")
+        self.joinmodules = []
+        for item in modules.join.__enabled__:
+            exec("self.joinmodules.append("+item+"."+item+"())")
+        self.staticmodules = []
+        for item in modules.static.__enabled__:
+            exec("self.staticmodules.append("+item+"."+item+"(self.connection))")
+            
+            
+    def setupLog(self):
+        outfile = open(logfile, "w")
+        outfile.close() #creates logfile
+        while 1: #run in a loop to keep updating list every 10 seconds
+            time.sleep (1) #waits one second for the bot to join all channels, here for initial run
+            for channel in self.channels:
+                self.connection.send_raw("LIST " + channel)
+                time.sleep(10) #waits so we don't overload the server
+            self.logUsers(self.amounts)
+    
+    def wait(self): #sounds off the hour
+        message = ''
+        waitlength = 1
+        changed = 0
+        bongs = self.getHour()
+        while 1:
+            if (self.currentHour != self.getHour()) or (changed == 1):
+                changed = 1
+                bongs = bongs + 1
+                if bongs > 12:
+                    bongs = bongs - 12
+                for i in range (0, bongs):
+                    message += 'BONG '
+                for channel in self.channels:
+                    self.connection.privmsg(channel, message)
+                message = '' #resets the message
+                waitlength = 3600 - self.getSec()
+            time.sleep(waitlength) #only checks once a second to greatly reduce CPU usage
+
+    def logUsers(self, writeMe):
+        write = 0
+        outfile = open(logfile, 'r')
+        for entry in writeMe:
+            if entry != (outfile.readline().rstrip('\n')):
+                write = 1
+                outfile.close()
+                break # only writes if the file has changed
+        if write == 1:
+            outfile = open(logfile, 'w')
+            for entry in writeMe:
+                outfile.write(entry)
+                outfile.write('\n')
+        outfile.close()
+        self.amounts = []
+
+    def on_list(self, connection, event):
+        data = (str(event.arguments()[0]) + ' ' + str(event.arguments()[1]))
+        self.amounts.append (data)
+
+
+
+    def on_welcome(self, connection, event):
+		self.connection.privmsg("nickserv", "identify "+self.password) #identify with nickserv
+		time.sleep(4)
+		#gives NickServ time to process authentication before joining channels
+		for channel in self.mychannels:
+			connection.join(channel)
+		self.fileUpdate()
+
+    def formulateMessage(self):
+        hour = self.getHour()
+        if hour == 0:
+            hour = 12
+        if self.getMin() == 0:
+            return "OI IT'S " + str(hour) + " BONG"
+        elif self.getMin() == 1:
+            return "OI IT'S 1 BIT PAST " + str(self.getHour()) + " BONG"
+        return "OI IT'S " + str(self.getMin()) + " BITS PAST " + str(hour) + " BONG"
+    
+    def on_pubmsg (self, connection, event):
+        message = event.arguments()[0]
+        source = event.source().split('!')[0]
+        if source + "\n" not in self.ignores:
+            for module in self.pubmodules:
+                thread.start_new_thread(module.on_pubmsg, (self.nick, connection, event))
+            if message == pubTimeCommand:
+                self.connection.privmsg(event.target(), self.formulateMessage()) #Say what time it is
+            elif message == PMTimeCommand:
+                self.connection.notice(event.source().split('!')[0], self.formulateMessage()) #tell the user who says the PMTimeCommand what time it is
+                                   
+    def on_privmsg (self, connection, event):  #the user specifies the channel after the command
+        eventList = event.arguments()[0].split(' ')
+        source = event.source().split('!')[0]
+        if source + "\n" in self.commandnicks:
+            if eventList[0] == ".update":
+                self.fileUpdate()
+            elif eventList[0] == '.enable':
+                self.enableDisableModule("enable", eventList[1], eventList[2], event)
+            elif eventList[0] == '.disable':
+                self.enableDisableModule("disable", eventList[1], eventList[2], event)
+        if eventList[0] == privTimeCommand:
+            self.connection.privmsg(eventList[1], self.formulateMessage()) #Say what time it is
+        if eventList[0] == sayCommand:
+            for i in range (2, len(eventList)): #starts at index 2 so we don't say the channel too
+                self.array.append(eventList[i])
+                self.array.append(' ') #creates a space between the words
+            self.message = ''.join(self.array)
+            self.connection.privmsg(eventList[1], self.message)
+            self.message = ''
+            self.array = [] #say what we say to the bot back to the channel
+        for module in self.privmodules:
+            module.on_privmsg(self.nick, connection, event)
+
+    def on_join(self, connection, event):
+        for module in self.joinmodules:
+            module.on_join(self.nick, connection, event)
+
+def main():
+    global pubTimeCommand
+    global privTimeCommand
+    global sayCommand
+    global PMTimeCommand
+    global log
+    global logfile
+    global speakfile
+    global amounts# need to declare these as global so they can be modified
+    global pastmessages # Used for ':s' substitution
+    arguments = []
+    file = open (sys.path[0] + "/COMMANDS", "r")
+    for line in file.readlines():
+        arguments.append(line.strip('\n'))#remove the newlines from the list
+    channels = arguments[6].split(' ')
+    nick = arguments[8]
+    network = arguments[2]
+    port = int(arguments[4])
+    password = arguments[10]
+    name = arguments[12]
+    pubTimeCommand = arguments[14]
+    privTimeCommand = arguments[16]
+    sayCommand = arguments[18]
+    PMTimeCommand = arguments[20]
+    log = arguments[22]
+    logfile = arguments[24]
+    bot = Bot(channels, nick, network, port, password, name)
+    bot.start()
+
+if __name__ == "__main__":
+    main()
