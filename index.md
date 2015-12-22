@@ -1,9 +1,9 @@
 #Gypsy IRC Bot
 
-####written by [Christopher T. Lemay](http://www.thecrittac.us), Adaptions by [Harley M. Luplow](harleyluplow.com)
-####requires python-irclib and beautifulsoup
+####written by [Christopher T. Lemay](http://www.thecrittac.us)
+###Adaptions by [Harley M. Luplow](harleyluplow.com)
 
-###A simple IRC bot that will chime off the number of BONGs at the top of the hour, among other things.
+###requires python-irclib and beautifulsoup
 
 USAGE: ./BigBen
 
