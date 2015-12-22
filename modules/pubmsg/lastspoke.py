@@ -68,4 +68,3 @@ class lastspoke:
             self.getLastSpoke(event.target(), user, connection)
             #except:
              #   connection.privmsg(event.target(),"To use the seen command: .seen Username")
-

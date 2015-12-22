@@ -1,16 +1,16 @@
 #This file contains commands for the BigBen IRC bot.
 #Network:
-irc.rizon.net
+irc.yournetwork.net
 #port
 6667
 #Channels:
-#help
+#yourchannel1 #yourchannel2
 #Nick:
-[EDIT]
+yourNick
 #Nickserv Password
-[EDIT]
+yourPassword
 #ircname:
-Stevie
+Benny
 #public time command
 .time
 #private time command

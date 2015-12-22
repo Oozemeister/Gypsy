@@ -1,5 +1,5 @@
-__all__ = ["decide", "eat", "echo", "feet", "fortunes", "fourchan", "google", "htmlconvert", "imdb", "isup", "lastspoke", "nowplaying", "pagetitle", "ping", "question", "rt", "roll", "sed", "shorten", "tell", "tz", "weather", "urban", "youtube", "help"]
-__enabled__ = ["decide", "eat", "echo", "feet", "fortunes", "fourchan", "google", "htmlconvert", "imdb", "isup", "lastspoke", "nowplaying", "pagetitle", "ping", "question", "roll", "rt", "sed", "shorten", "tell", "tz", "urban", "weather", "youtube", "help"]
+__all__ = ["decide", "eat", "echo", "feet", "fortunes", "fourchan", "google", "htmlconvert", "imdb", "isup", "lastspoke", "nowplaying", "pagetitle", "ping", "question", "quote", "rt", "roll", "sed", "shorten", "stock", "tell", "tz", "tweet", "weather", "urban", "youtube", "help"]
+__enabled__ = ["decide", "eat", "echo", "feet", "fortunes", "google", "htmlconvert", "imdb", "isup", "lastspoke", "nowplaying", "pagetitle", "ping", "question","quote","roll", "rt", "sed", "shorten", "stock", "tell", "tz", "tweet", "urban", "weather", "youtube", "help"]
 __commands__ = {
 	".decide" : "decide",
 	".eat" : "eat",
@@ -16,12 +16,14 @@ __commands__ = {
 	".roll" : "roll",
 	":s" : "sed",
 	".shorten" : "shorten",
+	".stock" : "stock",
 	".w" : "weather",
 	".f" : "weather",
 	".urban" : "urban",
 	".yt" : "youtube",
 	".tweet": "tweet",
-	".help" : "help"
+	".help" : "help",
+	".quote" : "quote"
 }
 __help__ = {
 	"decide" : ".decide this or that or then - Returns one of the choices\n.flip - returns heads or tails, .flip 5 will also return the stats of 5 flips",
@@ -42,11 +44,13 @@ __help__ = {
 	"roll" : ".roll - Roll a dice, .roll 20 will roll a 20 sided dice",
 	"sed" : ":s/a/b - will return the last matching message's a with b - closely follows the rules of GNU sed",
 	"shorten": ".shorten url - shorten a url",
+	"stock" : ".stock SYMBOL retrieves a stock quote for the specified stock symbol. This uses the Google Finance API",
 	"tell" : ".tell user I luv you ;) <3",
 	"tweet" : ".tweet TaylorSwift13 - get last tweet from user, if no user is defined the irc username will be used, .tweet TaylorSwift13 4, will return the fourth tweet",
 	"tz" : ".tz London - Return the timezone for any location", 
 	"weather" : ".w - return a weather of a location, .register_location someplace -will remember the location of given user, .f - will return a forecast",
 	"urban" : ".urban - return definition from urban dictionary",
 	"youtube" : ".yt - search youtube",
-	"help" : ".help - return list of available commands"
+	"help" : ".help - return list of available commands",
+	"quote" : ".quote [name] returns a random saved quote and .quote [name] [quote] will save a new quote"
 }

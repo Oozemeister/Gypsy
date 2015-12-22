@@ -34,7 +34,7 @@ class Bot(ircbot.SingleServerIRCBot):
         self.currentHour = self.getHour()
         self.currentMin = self.getMin() #sets current hour and minute, minute doesn't do anything right now
         self.amounts = amounts
-#        thread.start_new_thread(self.wait, ()) #listens for the time change in a separate thread so we can listen for input as well
+        thread.start_new_thread(self.wait, ()) #listens for the time change in a separate thread so we can listen for input as well
         if log == "yes":
             thread.start_new_thread(self.setupLog, ()) #starts a new thread that sets up the users per channel
         self.array = []
@@ -67,7 +67,7 @@ class Bot(ircbot.SingleServerIRCBot):
         return theTime.tm_sec
 
     def get_version(self):
-        return "Ayy" #CTCP VERSION reply
+        return "BIGBEN BOT" #CTCP VERSION reply
 
     def fileUpdate(self):
         self.nicksFile = open("NICKS", 'r')
@@ -263,7 +263,7 @@ class Bot(ircbot.SingleServerIRCBot):
                 if bongs > 12:
                     bongs = bongs - 12
                 for i in range (0, bongs):
-                    message += 'BONG '
+                    message += ''
                 for channel in self.channels:
                     self.connection.privmsg(channel, message)
                 message = '' #resets the message
@@ -293,12 +293,12 @@ class Bot(ircbot.SingleServerIRCBot):
 
 
     def on_welcome(self, connection, event):
-		self.connection.privmsg("nickserv", "identify "+self.password) #identify with nickserv
-		time.sleep(4)
-		#gives NickServ time to process authentication before joining channels
-		for channel in self.mychannels:
-			connection.join(channel)
-		self.fileUpdate()
+        self.connection.privmsg("nickserv", "identify "+self.password) #identify with nickserv
+        time.sleep(4)
+        #gives NickServ time to process authentication before joining channels
+        for channel in self.mychannels:
+            connection.join(channel)
+        self.fileUpdate()
 
     def formulateMessage(self):
         hour = self.getHour()
