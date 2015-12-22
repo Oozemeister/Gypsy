@@ -1,6 +1,6 @@
 #Gypsy IRC Bot
 
-####written by [Christopher T. Lemay](http://www.thecrittac.us) -- Adaptions by [Harley M. Luplow](harleyluplow.com)
+####written by [Christopher T. Lemay](http://www.thecrittac.us) -- adaptions by [Harley M. Luplow](harleyluplow.com)
 
 #####requires python-irclib and beautifulsoup
 
@@ -16,6 +16,7 @@ At the top of the hour, the bot will chime off the same number of BONGs that Big
 Ben does. Thus the bot is set to GMT. This happens in all channels that BigBen
 is in.
 
+#####Time
 If the phrase ".time" is said in the channel, the bot will tell what time it is,
 using the phrase "OI IT'S X BONG", where X is the number of BONGs said at the
 top of the hour.
@@ -23,15 +24,18 @@ The same thing happens if the message ".time #channel" is messaged to the bot pr
 If the phrase ".ptime" is said in the channel, the bot will /notice the person
 who said such a thing with the current time.
 
+#####Speak
 If the bot receives a private message of ".speak #channel TEXT_HERE", it will
 echo the text back to the channel specified.
 
 Many of these commands can be changed in the COMMANDS file in order to cut down on possible spam.
 
+#####Ignore
 Nicks in the IGNORE file will be ignored. This is useful if there are other
 bots in the channel that we don't want BigBen to get links from. This file
 needs to end with a newline character.
 
+#####Nicks
 Nicks in the NICKS file can privately message the bot ".update" to update the
 responses files, the IGNORE file and the NICKS file. The NICKS file also
 needs to end with a newline character. This command also updates the modules,
@@ -39,6 +43,7 @@ checking the `__init__.py` files of each directory for modules to add and
 remove. All modules need to be listed in the `__all__` list, and enabled
 modules are in the `__enabled__` list.
 
+#####Modules
 Modules can be loaded unloaded with the ".enable" and ".disable" commands.
 The syntax of these commands is ".enable module_type module_name". The
 ".disable" command works similarly. Valid module types are "pubmsg", "privmsg"
