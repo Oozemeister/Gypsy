@@ -1,9 +1,9 @@
 #Gypsy IRC Bot
 
 ####written by [Christopher T. Lemay](http://www.thecrittac.us)
-###Adaptions by [Harley M. Luplow](harleyluplow.com)
+#####Adaptions by [Harley M. Luplow](harleyluplow.com)
 
-###requires python-irclib and beautifulsoup
+#####requires python-irclib and beautifulsoup
 
 USAGE: ./BigBen
 
