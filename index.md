@@ -1,7 +1,6 @@
 #Gypsy IRC Bot
 
-####written by [Christopher T. Lemay](http://www.thecrittac.us)
-#####Adaptions by [Harley M. Luplow](harleyluplow.com)
+####written by [Christopher T. Lemay](http://www.thecrittac.us) -- Adaptions by [Harley M. Luplow](harleyluplow.com)
 
 #####requires python-irclib and beautifulsoup
 
