@@ -2,8 +2,9 @@
 .. _Harley M. Luplow: http://harleyluplow.com
 .. _Rizon: irc://rizon.net
 
+*****
 Gypsy IRC Bot
-==================
+*****
 written by `Christopher T. Lemay`_ -- adaptions by `Harley M. Luplow`_.
 
 requires python-irclib and beautifulsoup
