@@ -187,5 +187,4 @@ Contact
 If you would like to see the bot in action and/or talk with me and the bot, you
 can join #BigBen on `Rizon`_.
 
-BigBen is licensed under the terms of the GNU General Public license, version
-2 or later, at the user's discretion.
+.. footer:: BigBen is licensed under the terms of the GNU General Public license, version 2 or later, at the user's discretion.
