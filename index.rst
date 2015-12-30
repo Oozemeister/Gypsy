@@ -3,7 +3,7 @@
 
 Gypsy IRC Bot
 ==================
-written by 'Christopher T. Lemay'_ -- adaptions by [Harley M. Luplow](harleyluplow.com)
+written by `Christopher T. Lemay`_ -- adaptions by [Harley M. Luplow](harleyluplow.com)
 requires python-irclib and beautifulsoup
 
 
