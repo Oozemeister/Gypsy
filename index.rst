@@ -145,7 +145,8 @@ Sed
 The bot also supports modifying previous messages with a sed-like syntax. For
 example:
 
-.. line_block
+::
+
 |``<TheCrittaC> aabb``
 |``<TheCrittaC> :s/a/b``
 |``<BigBen> TheCrittaC: babb``
