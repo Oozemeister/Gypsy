@@ -3,7 +3,7 @@
 
 Gypsy IRC Bot
 ==================
-written by `Christopher T. Lemay`_ -- adaptions by `Harley M. Luplow`
+written by `Christopher T. Lemay`_ -- adaptions by `Harley M. Luplow`_.
 requires python-irclib and beautifulsoup
 
 
@@ -65,6 +65,8 @@ The next commands listed are provided as modules for the bot. See `modules/pubms
 for an example module. If you would like to write a module, but are stuck, please join #BigBen
 on irc.rizon.net.
 
+Ping
+------------
 If ".ping" (or any other message starting with '.' and ending with 'ing') is said in any
 channel, the bot will replace 'ing' with 'ong' and respond to that same channel. This is
 provided with the `ping.py` module. 
