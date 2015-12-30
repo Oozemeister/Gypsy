@@ -1,5 +1,6 @@
 .. _Christopher T. Lemay: http://thecrittac.us/
 .. _Harley M. Luplow: http://harleyluplow.com
+.. _Rizon: irc://rizon.net
 
 Gypsy IRC Bot
 ==================
@@ -179,8 +180,10 @@ Some modules are not documented here, instead of documenting them, there is
 interactive help in the bot. Simply say .help to get a notification from the
 bot of the enabled modules and their usage.
 
+Contact
+~~~~~~~~~
 If you would like to see the bot in action and/or talk with me and the bot, you
-can join #BigBen on [Rizon](irc://irc.rizon.net).
+can join #BigBen on `Rizon`_.
 
 BigBen is licensed under the terms of the GNU General Public license, version
 2 or later, at the user's discretion.
