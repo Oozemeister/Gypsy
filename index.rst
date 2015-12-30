@@ -1,9 +1,9 @@
 .. _Christopher T. Lemay: http://thecrittac.us/
-.. _Harley Luplow: http://harleyluplow.com
+.. _Harley M. Luplow: http://harleyluplow.com
 
 Gypsy IRC Bot
 ==================
-written by `Christopher T. Lemay`_ -- adaptions by [Harley M. Luplow](harleyluplow.com)
+written by `Christopher T. Lemay`_ -- adaptions by `Harley M. Luplow`
 requires python-irclib and beautifulsoup
 
 
@@ -50,7 +50,8 @@ checking the `__init__.py` files of each directory for modules to add and
 remove. All modules need to be listed in the `__all__` list, and enabled
 modules are in the `__enabled__` list.
 
-#####Modules
+Modules
+~~~~~~~~
 Modules can be loaded unloaded with the ".enable" and ".disable" commands.
 The syntax of these commands is ".enable module_type module_name". The
 ".disable" command works similarly. Valid module types are "pubmsg", "privmsg"
