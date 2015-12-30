@@ -1,11 +1,10 @@
+.. _Christopher T. Lemay: http://thecrittac.us/
+.. _Harley Luplow: http://harleyluplow.com
+
 Gypsy IRC Bot
 ==================
 written by 'Christopher T. Lemay'_ -- adaptions by [Harley M. Luplow](harleyluplow.com)
 requires python-irclib and beautifulsoup
-
-
-.. Christopher T. Lemay: http://thecrittac.us/
-.. _Harley Luplow: http://harleyluplow.com
 
 
 USAGE: ./BigBen
