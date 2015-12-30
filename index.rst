@@ -4,6 +4,7 @@
 Gypsy IRC Bot
 ==================
 written by `Christopher T. Lemay`_ -- adaptions by `Harley M. Luplow`_.
+
 requires python-irclib and beautifulsoup
 
 
@@ -71,24 +72,34 @@ If ".ping" (or any other message starting with '.' and ending with 'ing') is sai
 channel, the bot will replace 'ing' with 'ong' and respond to that same channel. This is
 provided with the `ping.py` module. 
 
+Page Title
+------------
 If a URL is posted in the channel, the bot will fetch its title and send it to the
 channel, unless it contains a regex in the `NoTitle` file. This is provided by the
 `pagetitle.py` file.
 
+Tweet
+------------
 If the phrase ".tweet USERNAME" is said in the channel, the bot will fetch the
 most recent tweet from that user. If a number is specified after the tweet, the
 nth tweet will be fetched. This is provided with the `tweet.py` module.
 
+Urban Dictionary
+------------
 If the phrase ".urban TERM (optional definition number)" is said in the channel,
 the bot will fetch a definition for that term from Urban Dictionary. If a number
 is not specified, the bot will fetch the first definition for that term. This is
 provided with the `urban.py` module.
 
+Tell
+------------
 If the phrase ".tell NICK MESSAGE" is said in the channel, the bot will /query
 the message to the given nick when that nick joins any channel the bot is in or
 sends a message to any channel the bot is in. This provided with the `tell.py`
 module.
 
+4chan
+------------
 If the phrase ".4chan BOARD SEARCH_TERM" is said in the channel, the bot will
 search the given board on 4chan for threads that have the search term in the
 original post. For example, ".4chan g desktop thread" would search /g/ for
@@ -96,28 +107,40 @@ threads that have "desktop thread" in the original post. In addition, if a
 link is posted to a 4chan post, the post's content will be put in the channel.
 This is provided with the `fourchan.py` module. 
 
+Convert
+------------
 If the phrase ".convert" is said in the channel with an HTML color code in
 hexidecimal as an argument, it will be converted to decimal. Similarly, if
 it is in decimal (e.g. 255-255-255), the bot will convert it to hexidecimal
 and message it to the channel. This is provided with the `htmlconvert.py` module.
 
+Reponses
+------------
 If a message in any channel starts with the bot's nick and ends with '??' (for example,
 "BigBen, am I ever going to get married??"), the bot will give a random response from the
 RESPONSES file. This is provided with the `question.py` module.
 
+Custom Responses
+------------
 If the message, minus the leading nick and trailing question mark, is in the
 CUSTOMRESPONSES file before the "::" in its line, the message after the "::"
 will be sent to the channel. This is also provided with the `question.py` module.
 
+Last Seen
+------------
 The `lastseen.py` module records the last time a user has spoke. Saying
 ".seen USERNAME" in the channel will show a user's last message and a timestamp
 of the message.
 
+Weather
+------------
 The `weather.py` module takes a location as an argument and returns weather for
 that location, using the Weather Underground API. If the weather is not
 available from there, it uses the OpenWeatherMap API. The command is
 ".weather LOCATION"
 
+Sed
+------------
 The bot also supports modifying previous messages with a sed-like syntax. For
 example:
 
@@ -129,22 +152,28 @@ example:
 
 This is provided with the `sed.py` module.
 
+Last.fm Now Playing
+------------
 The `nowplaying.py` module lets the bot access a user's most recently played
 song on last.fm. If no arguments are specified, the user's nick is used as
 the last.fm username. A user can set their username with the command
 `.np set USERNAME`. A user can see what another user is playing by using the
 command `.np USERNAME`.
 
+Stock
+------------
+The `stock.py` module retrieves a stock quote for the specified stock symbol.
+This uses the Google Finance API. For example, .stock F would retrieve a stock
+quote for Ford Motor Company, which has the stock symbol F.
+
+Static Modules
+-----------
 Static modules are always running. They are not event-driven.
 
 The `fourchanmonitor.py` module monitors 4chan for updated threads that match
 a given regular expression. This is configurable via the `ThreadMonitor` file.
 When a new thread is found, it is sent to the given thread along with the first
 fifty characters of the original post.
-
-The `stock.py` module retrieves a stock quote for the specified stock symbol.
-This uses the Google Finance API. For example, .stock F would retrieve a stock
-quote for Ford Motor Company, which has the stock symbol F.
 
 Some modules are not documented here, instead of documenting them, there is
 interactive help in the bot. Simply say .help to get a notification from the
