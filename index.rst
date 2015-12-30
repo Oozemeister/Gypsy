@@ -1,6 +1,6 @@
 Gypsy IRC Bot
 ==================
-written by [Christopher T. Lemay](http://www.thecrittac.us) -- adaptions by [Harley M. Luplow](harleyluplow.com)
+written by 'Christopher T. Lemay <http://thecrittac.us>' -- adaptions by [Harley M. Luplow](harleyluplow.com)
 requires python-irclib and beautifulsoup
 
 USAGE: ./BigBen
