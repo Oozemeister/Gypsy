@@ -3,6 +3,11 @@ Gypsy IRC Bot
 written by 'Christopher T. Lemay <http://thecrittac.us>' -- adaptions by [Harley M. Luplow](harleyluplow.com)
 requires python-irclib and beautifulsoup
 
+
+.. Christopher Lemay: http://thecrittac.us/
+.. _Harley Luplow: http://harleyluplow.com
+
+
 USAGE: ./BigBen
 
 The first set of commands will cause the bot to connect to the given network, assume the given
