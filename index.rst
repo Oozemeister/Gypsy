@@ -145,11 +145,11 @@ Sed
 The bot also supports modifying previous messages with a sed-like syntax. For
 example:
 
-``<TheCrittaC> aabb``
-``<TheCrittaC> :s/a/b``
-``<BigBen> TheCrittaC: babb``
-``<TheCrittaC> :s/a/b/g``
-``<BigBen> TheCrittaC: bbbb``
+|``<TheCrittaC> aabb``
+|``<TheCrittaC> :s/a/b``
+|``<BigBen> TheCrittaC: babb``
+|``<TheCrittaC> :s/a/b/g``
+|``<BigBen> TheCrittaC: bbbb``
 
 This is provided with the `sed.py` module.
 
